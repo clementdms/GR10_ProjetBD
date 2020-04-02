@@ -1,0 +1,3 @@
+DROP PROCEDURE AFFICHAGE_COMMANDE_CLIENT;
+DROP PROCEDURE supprimer_clients_reservation;
+
