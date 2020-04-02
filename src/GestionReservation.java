@@ -10,7 +10,7 @@ public class GestionReservation {
 		try{	
 			String sql=	
 					"SELECT * "+
-					"FROM CLIENT "+
+					"FROM AC_CLIENT "+
 					"WHERE numeropassport_client='"+NumPasseport+"'";
 			Statement statement = conn.createStatement();
 	    	ResultSet rs=statement.executeQuery(sql);
@@ -261,7 +261,7 @@ public class GestionReservation {
 	        int idClient = -1;
 	        if(dejaClient) {
 	        	ResultSet resultSet = statement.executeQuery("SELECT id_client \r\n"+
-	        												"FROM CLIENT \r\n" +
+	        												"FROM AC_CLIENT \r\n" +
 	        												"WHERE prenom_client = " + prenomClient + "\r\n"+
 	        												"AND nom_client = " + nomClient + "");
 	        	
@@ -271,12 +271,12 @@ public class GestionReservation {
 				
 				System.out.println("*------------------------------*");
 				System.out.println("\tVoulez vous utilier vos points de fidelité ? (o/n)");
-				resultSet = statement.executeQuery("SELECT COALESCE(SUM(duree_vol),0)/50 - CLIENT.nbFideliteUtilise_client  AS point_fidelite\r\n" + 
-							        						"FROM CLIENT\r\n" + 
-							        						"INNER JOIN RESERVATION ON CLIENT.id_client = RESERVATION.id_client\r\n" + 
+				resultSet = statement.executeQuery("SELECT COALESCE(SUM(duree_vol),0)/50 - AC_CLIENT.nbFideliteUtilise_client  AS point_fidelite\r\n" + 
+							        						"FROM AC_CLIENT\r\n" + 
+							        						"INNER JOIN RESERVATION ON AC_CLIENT.id_client = RESERVATION.id_client\r\n" + 
 							        						"INNER JOIN RESERVE ON RESERVATION.id_reservation = RESERVE.id_reservation\r\n" + 
 							        						"INNER JOIN VOL ON RESERVE.numero_vol = VOL.numero_vol\r\n" + 
-							        						"WHERE CLIENT.id_client = " + idClient + "\r\n" + 
+							        						"WHERE AC_CLIENT.id_client = " + idClient + "\r\n" + 
 							        						"AND ((VOL.date_vol < NOW())O(VOL.date_vol = NOW() AND VOL.horaire_vol < NOW()))");
 				while (resultSet.next()) {
 					nbFidelite = resultSet.getInt("point_fidelite");
@@ -285,8 +285,8 @@ public class GestionReservation {
 				System.out.println("*------------------------------*");
 		        if(LectureClavier.lireChaine("\t-") == "o") {
 		        	choixFidelite = true;
-				statement.execute("UPDATE CLIENT"
-						+ "SET nbFideliteUtilise_client = " + nbFidelite + "+ (SELECT nbFideliteUtilise_client FROM CLIENT WHERE id_client = " + idClient + ")"
+				statement.execute("UPDATE AC_CLIENT"
+						+ "SET nbFideliteUtilise_client = " + nbFidelite + "+ (SELECT nbFideliteUtilise_client FROM AC_CLIENT WHERE id_client = " + idClient + ")"
 						+ "WHERE id_client = " + idClient + "");
 		        }
 		        else {
@@ -305,14 +305,14 @@ public class GestionReservation {
 				String passportClient = LectureClavier.lireChaine("\tVotre numéro de passport : ");
 				System.out.println("*------------------------------*");
 				ResultSet resultSet = statement.executeQuery("SELECT id_client"
-						+ "									FROM CLIENT"
+						+ "									FROM AC_CLIENT"
 						+ "									ORDER BY id_client DESC"
 						+ "									LIMIT 1");
 				int idClientMax = -1;
 				while (resultSet.next()) {
 					idClientMax = resultSet.getInt("id_client");
 				}
-				statement.execute("INSERT INTO CLIENT (id_client, nom_client, prenom_client, numeroRue_client, rue_client, code_postal_client, ville_client, pays_client, nbFideliteUtilise_client, numeropassport_client) VALUES ('" + idClientMax + 1 + "', '" + nomClient + "' , '" + prenomClient + "', " + numeroRueClient + ", '" + rueClient + "', " + cpClient + ", '" + villeClient + "', '" + paysClient +"',0 ,'" + passportClient + "');");
+				statement.execute("INSERT INTO AC_CLIENT (id_client, nom_client, prenom_client, numeroRue_client, rue_client, code_postal_client, ville_client, pays_client, nbFideliteUtilise_client, numeropassport_client) VALUES ('" + idClientMax + 1 + "', '" + nomClient + "' , '" + prenomClient + "', " + numeroRueClient + ", '" + rueClient + "', " + cpClient + ", '" + villeClient + "', '" + paysClient +"',0 ,'" + passportClient + "');");
 				idClient = idClientMax+1;
 	        }
 	        
@@ -434,7 +434,7 @@ public class GestionReservation {
 	  	    Statement requeteAfficheClientReservation = conn.createStatement();
 	 		ResultSet reqAffCR = requeteAfficheClientReservation.executeQuery
 	 		(
-	 				"SELECT id_client, nom_client, prenom_client From CLIENT NATURAL JOIN RESERVATION"
+	 				"SELECT id_client, nom_client, prenom_client From AC_CLIENT NATURAL JOIN RESERVATION"
 	 				
 	 		) ;
 	 		

@@ -15,12 +15,14 @@ public class AirChance {
 	  	 
 	  	    // Etablissement de la connection
 		    DatabaseAccessProperties dap = new DatabaseAccessProperties(configurationFile);
+		    
+		    
 	  	    System.out.print("Connecting to the database... "); 
 	 	    conn = DriverManager.getConnection(dap.getDatabaseUrl(), dap.getUsername(),dap.getPassword());
 	   	    System.out.println("connected");
 	  	    conn.setAutoCommit(true);
 			
-			System.out.println("----Connecté---");
+			System.out.println("----Connection OK---");
 			int choixUtilisateur=LectureClavier.lireEntier("Que souhaitez vous faire ?\n"+
 			"1-\tPlannifier un nouveau vol\n"+
 			"2-\tModifier la plannification d'un nouveau vol\n"+

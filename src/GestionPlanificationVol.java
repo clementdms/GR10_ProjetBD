@@ -795,9 +795,9 @@ public class GestionPlanificationVol {
 					System.out.println("Le vol est bien supprimé");
 					System.out.println("Les clients sur ce vol vont etre automatique déplacé é des vols futurs");
 					//Requete que permet de recuperé les clients à deplacer
-					resultSet = statement.executeQuery("SELECT CLIENT.id_client\r\n" + 
-				    	        						"FROM CLIENT\r\n" + 
-				    	        						"INNER JOIN RESERVATION ON RESERVATION.id_client = CLIENT.id_client\r\n" + 
+					resultSet = statement.executeQuery("SELECT AC_CLIENT.id_client\r\n" + 
+				    	        						"FROM AC_CLIENT \r\n" + 
+				    	        						"INNER JOIN RESERVATION ON RESERVATION.id_client = AC_CLIENT.id_client\r\n" + 
 				    	        						"INNER JOIN RESERVE ON RESERVE.id_reservation = RESERVATION.id_reservation\r\n" + 
 				    	        						"WHERE RESERVE.numero_vol = '" + choixSupprime+"'");
 					
